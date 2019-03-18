@@ -5,7 +5,7 @@ from datetime import datetime
 from pprint import pprint
 
 
-access_token = '1d46108b102b76d2cc299e6ffe9f76f4b1687d504b0879a5df32fd6556a7641b249c8bdefdb8846ab7638'
+access_token = '643664a007e9e890893d3fb5c109d24a0b6ad0ff9c17d9daf529b278f0a8d213d8a7462b75c20a1cdebb0'
 version = '5.92'
 
 
@@ -13,9 +13,9 @@ class User:
     age = None
     bdate = None
     sex = None
+    city = None
     friends = set()
     groups = set()
-    city = None
     interests = set()
     music = set()
     books = set()
@@ -38,8 +38,8 @@ class User:
             'user_ids': self.user_id,
             'access_token': access_token,
             'v': version,
-            'fields': 'id,first_name,last_name,bdate,city,interests,'
-                      'photo_max_orig,sex,books,music',
+            'fields': 'id,first_name,last_name,bdate,city,country,common_count,'
+                      'interests,photo_max_orig,sex,books,music',
         }
         response = requests.get('https://api.vk.com/method/users.get', params)
         user_information = response.json()
@@ -111,7 +111,7 @@ class User:
         except KeyError:
             return set()
 
-    def select_photos(self):
+    def search_photos(self):
         params = {
             'owner_id': self.user_id,
             'album_id': 'profile',
@@ -129,7 +129,8 @@ class User:
                     if size['type'] == 'x':
                         link = size['photo_ids']
                 photos_dict[link] = likes_photos
-            top_3 = sorted(photos_dict.items(), key=lambda x: x[1], reverse=True)[0:3]
+            top_3 = sorted(photos_dict.items(),
+                           key=lambda x: x[1], reverse=True)[0:3]
             time.sleep(0.3)
             return top_3
         except KeyError:
@@ -146,6 +147,17 @@ class RequiredUser(User):
 
     def comparison(self, other):
         ratings = []
+        mutual_friends = self.friends & other.friends
+        if len(mutual_friends) > 15:
+            ratings.append(4 * self.friends_weight)
+        elif 15 < len(mutual_friends) <= 15:
+            ratings.append(3 * self.friends_weight)
+        elif 10 < len(mutual_friends) <= 10:
+            ratings.append(2 * self.friends_weight)
+        elif 0 < len(mutual_friends) <= 5:
+            ratings.append(1 * self.friends_weight)
+        else:
+            ratings.append(0 * self.friends_weight)
         if self.age is not None and other.age is not None:
             age_other = self.age - other.age
             if abs(age_other) == 0:
@@ -158,17 +170,6 @@ class RequiredUser(User):
                 ratings.append(1 * self.age_weight)
         else:
             ratings.append(0)
-        mutual_friends = self.friends & other.friends
-        if len(mutual_friends) > 15:
-            ratings.append(4 * self.friends_weight)
-        elif 15 < len(mutual_friends) <= 15:
-            ratings.append(3 * self.friends_weight)
-        elif 10 < len(mutual_friends) <= 10:
-            ratings.append(2 * self.friends_weight)
-        elif 0 < len(mutual_friends) <= 5:
-            ratings.append(1 * self.friends_weight)
-        else:
-            ratings.append(0 * self.friends_weight)
         general_groups = self.groups & other.groups
         if len(general_groups) > 15:
             ratings.append(4 * self.groups_weight)
@@ -200,15 +201,17 @@ class RequiredUser(User):
         age_from = str(input('Введите возраст от:'))
         age_to = str(input('до:'))
         params = {
+            'count': '50',
             'access_token': access_token,
             'v': version,
-            'fields': 'id,first_name,last_name,bdate,city,interests,'
-                      'photo_max_orig,sex,books,music',
+            'fields': 'id,first_name,last_name,bdate,city,country,common_count,'
+                      'interests,photo_max_orig,sex,books,music,status',
             'city': str(self.city),
             'sex': sex,
             'age_from': age_from,
             'age_to': age_to,
-            'has_photo': '1'
+            'has_photo': '1',
+            'status': '6'
         }
         response = requests.get('https://api.vk.com/method/users.search', params)
         search_data = response.json()
@@ -220,7 +223,7 @@ class RequiredUser(User):
 
 
 if __name__ == "__main__":
-    User = User('139712322')
+    User = User('43782857')
     User.search_friends_user()
     User.search_groups_user()
     pprint(User.search_data_user())
