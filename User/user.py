@@ -117,7 +117,7 @@ class User:
             'album_id': 'profile',
             'extended': '1',
             'access_token': access_token,
-            'v': version,
+            'v': version
         }
         response = requests.get('https://api.vk.com/method/photos.get', params)
         owner_photos = response.json()
