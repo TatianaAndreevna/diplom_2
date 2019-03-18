@@ -39,7 +39,7 @@ def top_10(required_user):
 
 
 if __name__ == "__main__":
-    required_user = RequiredUser('43782857')
+    required_user = RequiredUser('139712322')
     required_user.search_data_user()
     if len(required_user.books) == 0:
         books = input('Введите ваши любимые книги:')
