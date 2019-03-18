@@ -38,7 +38,7 @@ class User:
             'user_ids': self.user_id,
             'access_token': access_token,
             'v': version,
-            'fields': 'id,first_name,last_name,bdate,city,country,common_count,'
+            'fields': 'id,first_name,last_name,bdate,city,'
                       'interests,photo_max_orig,sex,books,music',
         }
         response = requests.get('https://api.vk.com/method/users.get', params)
@@ -204,14 +204,13 @@ class RequiredUser(User):
             'count': '50',
             'access_token': access_token,
             'v': version,
-            'fields': 'id,first_name,last_name,bdate,city,country,common_count,'
-                      'interests,photo_max_orig,sex,books,music,status',
+            'fields': 'id,first_name,last_name,bdate,city,'
+                      'interests,photo_max_orig,sex,books,music',
             'city': str(self.city),
             'sex': sex,
             'age_from': age_from,
             'age_to': age_to,
-            'has_photo': '1',
-            'status': '6'
+            'has_photo': '1'
         }
         response = requests.get('https://api.vk.com/method/users.search', params)
         search_data = response.json()
