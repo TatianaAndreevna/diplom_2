@@ -15,8 +15,8 @@ def top_10(required_user):
             following_user.search_data_user()
             following_user.search_friends_user()
             following_user.search_groups_user()
-            search_users_dict[user] = required_user.comparison(search_users)
-            search_photo_users[user] = search_users.select_photos
+            search_users_dict[user] = required_user.comparison(following_user)
+            search_photo_users[user] = following_user.search_photos()
             print('-')
         else:
             continue
@@ -24,7 +24,7 @@ def top_10(required_user):
                                key=lambda x: x[1], reverse=True)
 
     data_base = list()
-    for user in search_users_dict[0:9]:
+    for user in search_users_dict[0:10]:
         dict_top_10 = dict()
         user_photos = search_photo_users[user[0]]
         list_photos = list()
@@ -39,8 +39,8 @@ def top_10(required_user):
 
 
 if __name__ == "__main__":
-    required_user = RequiredUser('139712322')
-    required_user.search_users_get()
+    required_user = RequiredUser('43782857')
+    required_user.search_data_user()
     if len(required_user.books) == 0:
         books = input('Введите ваши любимые книги:')
         books = ''.join(x for x in books if x not in string.punctuation)
@@ -57,8 +57,3 @@ if __name__ == "__main__":
     required_user.search_groups_user()
     top_10_users = top_10(required_user)
     pprint(top_10_users)
-
-
-
-
-
