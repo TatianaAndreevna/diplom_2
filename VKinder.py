@@ -38,9 +38,12 @@ def top_10(required_user):
     return data_base
 
 
+# Поиск людей, подходящих под условия, на основании информации о конкретном пользователе из ВК.
+# Вывод популярных фото с аватара подошедших людей.
 if __name__ == "__main__":
-    required_user = RequiredUser('139712322')
+    required_user = RequiredUser('43782857')
     required_user.search_data_user()
+# Если у пользователя не заполнены любимые книги, музыка и интересы, то можно ввести их вручную
     if len(required_user.books) == 0:
         books = input('Введите ваши любимые книги:')
         books = ''.join(x for x in books if x not in string.punctuation)
