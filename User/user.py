@@ -9,6 +9,8 @@ access_token = '643664a007e9e890893d3fb5c109d24a0b6ad0ff9c17d9daf529b278f0a8d213
 version = '5.92'
 
 
+# Данные о конкретом пользователе: возраст, день рождения, пол, город, друзья, группы,
+# интересы, любимая музыка и книги:
 class User:
     age = None
     bdate = None
@@ -38,7 +40,7 @@ class User:
             'user_ids': self.user_id,
             'access_token': access_token,
             'v': version,
-            'fields': 'id,first_name,last_name,bdate,city,'
+            'fields': 'id,first_name,last_name,bdate,city,,'
                       'interests,photo_max_orig,sex,books,music',
         }
         response = requests.get('https://api.vk.com/method/users.get', params)
@@ -136,7 +138,9 @@ class User:
         except KeyError:
             return list()
 
-
+# У каждого критерия поиска должны быть свои веса. То есть совпадение по возрасту
+# должны быть важнее общих групп. Интересы по музыке важнее книг. Наличие общих
+# друзей важнее возраста.
 class RequiredUser(User):
     friends_weight = 0.5
     age_weight = 0.45
@@ -221,8 +225,9 @@ class RequiredUser(User):
         return search_list
 
 
+# Вывод данных о конкретном пользователе, на основе которых будет произведен поиск топ-10 людей.
 if __name__ == "__main__":
-    User = User('139712322')
+    User = User('43782857')
     User.search_friends_user()
     User.search_groups_user()
     pprint(User.search_data_user())
