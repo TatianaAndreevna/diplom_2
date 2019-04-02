@@ -31,8 +31,8 @@ def top_10(required_user):
         for photo in user_photos:
             list_photos.append(photo)
         dict_top_10['user_id'] = user[0]
-        dict_top_10['user_page'] = 'https:/vk.com/id' + str(user[0])
-        dict_top_10['user_photos'] = list_photos
+        dict_top_10['user_page'] = 'https://vk.com/id' + str(user[0])
+        dict_top_10['photos'] = list_photos
         data_base.append(dict_top_10)
     db.add_users(data_base)
     return data_base
