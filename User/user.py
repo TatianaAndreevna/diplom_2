@@ -126,11 +126,11 @@ class User:
         try:
             photos_dict = dict()
             for photo in owner_photos['response']['items']:
-                likes_photos = photo['likes']['consider']
-                for size in photo['size']:
+                likes = photo['likes']['count']
+                for size in photo['sizes']:
                     if size['type'] == 'x':
-                        link = size['photo_ids']
-                photos_dict[link] = likes_photos
+                        link = size['url']
+                photos_dict[link] = likes
             top_3 = sorted(photos_dict.items(),
                            key=lambda x: x[1], reverse=True)[0:3]
             time.sleep(0.3)
