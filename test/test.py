@@ -2,6 +2,7 @@ import unittest
 import string
 from VKinder import top_10
 from User.user import RequiredUser
+# from schema import Schema, And, Use, SchemaError
 
 
 class MyTest(unittest.TestCase):
@@ -23,6 +24,22 @@ class MyTest(unittest.TestCase):
         required_user.search_friends_user()
         required_user.search_groups_user()
         self.assertIsInstance(top_10(required_user)[0], dict)
+
+    # top10_structure = Schema({
+    #     '_id': And(Use(str)),
+    #     'photos': And(Use(list)),
+    #     'user_id': And(Use(int)),
+    #     'user_page': And(Use(str))
+    # })
+    # 
+    # def check(top10_structure, top_10):
+    #     try:
+    #         top10_structure.validate(top_10)
+    #         return True
+    #     except SchemaError:
+    #         return False
+    # 
+    # print(check(top10_structure, top_10))
 
 
 if __name__ == '__main__':
